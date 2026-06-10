@@ -1,1 +1,111 @@
-{ "modules": [] }
+{
+  "modules": [
+    {
+      "name": "modulus-assistant",
+      "version": "1.0.0",
+      "description": "Unified everyday assistant: calendar, tasks, reminders, weather, briefings, and day-planning in one module.",
+      "tarball": "https://github.com/LukeJamesCode/modulus-registry/releases/download/v1.0.0/modulus-assistant-1.0.0.tgz",
+      "sha256": "578ec8d319a5835bd7b3a72d63e5bd68d0ab532c2ea4bfd4791c2736a4404cc4",
+      "permissions": {
+        "network": [
+          "accounts.google.com",
+          "oauth2.googleapis.com",
+          "www.googleapis.com",
+          "tasks.googleapis.com",
+          "api.open-meteo.com",
+          "geocoding-api.open-meteo.com"
+        ]
+      }
+    },
+    {
+      "name": "modulus-browser",
+      "version": "1.0.0",
+      "description": "Lets agents drive a real headless browser (navigate, read, click, type, screenshot) with SSRF guards. Heavy: needs Playwright + Chromium; intended for Standard/Heavy tiers, never a Raspberry Pi.",
+      "tarball": "https://github.com/LukeJamesCode/modulus-registry/releases/download/v1.0.0/modulus-browser-1.0.0.tgz",
+      "sha256": "3913ae8978a8f662e1aa8d2453bad0ed3222484d965b1791fec2dd6c359c2e62",
+      "permissions": {
+        "network": [
+          "*"
+        ]
+      }
+    },
+    {
+      "name": "modulus-codex",
+      "version": "1.0.0",
+      "description": "Escalate hard tasks from the local Qwen models to OpenAI Codex over a ChatGPT subscription (OAuth). Codex acts as Modulus's deep-reasoning brain for coding, reasoning, writing, planning, and analysis the small models can't do at quality. Local-first.",
+      "tarball": "https://github.com/LukeJamesCode/modulus-registry/releases/download/v1.0.0/modulus-codex-1.0.0.tgz",
+      "sha256": "80710063f050acc986d491ae6a8ec62e86a3e89c96c640fee0b975eee99dbb12",
+      "permissions": {
+        "network": [
+          "api.openai.com",
+          "auth.openai.com",
+          "chatgpt.com"
+        ]
+      }
+    },
+    {
+      "name": "modulus-discord",
+      "version": "1.0.0",
+      "description": "Discord as a second chat surface alongside Telegram. One Modulus process, two surfaces — same model, memory, extensions, and confirm-tier UX. Gateway WebSocket (no inbound webhook), DM-allowlist or per-channel opt-in, button-based confirm-tier prompts.",
+      "tarball": "https://github.com/LukeJamesCode/modulus-registry/releases/download/v1.0.0/modulus-discord-1.0.0.tgz",
+      "sha256": "8756cd34d9b79f2626a9edd78464648eb781d8e6fed8aa64958df6df3c8352a7",
+      "permissions": {
+        "network": [
+          "discord.com",
+          "gateway.discord.gg",
+          "cdn.discordapp.com"
+        ]
+      }
+    },
+    {
+      "name": "modulus-minimax",
+      "version": "1.0.0",
+      "description": "Adds MiniMax (chatcompletion_v2) as an LLM provider. Not OpenAI-compatible.",
+      "tarball": "https://github.com/LukeJamesCode/modulus-registry/releases/download/v1.0.0/modulus-minimax-1.0.0.tgz",
+      "sha256": "5a29d3e29ba98d6eabc87d0e0e331cae7a8e49bc86a5a0f4f37d4e349432f573",
+      "permissions": {
+        "network": [
+          "api.minimaxi.chat"
+        ]
+      }
+    },
+    {
+      "name": "modulus-openai",
+      "version": "1.0.0",
+      "description": "Register OpenAI-compatible chat-completions endpoints as Modulus LLM provider aliases.",
+      "tarball": "https://github.com/LukeJamesCode/modulus-registry/releases/download/v1.0.0/modulus-openai-1.0.0.tgz",
+      "sha256": "4770acf5d9831dafb6df27d66e0de8ababb3f71b5516bc55173e6049efa52c50",
+      "permissions": {
+        "network": [
+          "api.openai.com",
+          "api.deepseek.com"
+        ]
+      }
+    },
+    {
+      "name": "modulus-voice",
+      "version": "1.0.0",
+      "description": "Two-way voice for Telegram: outbound replies via Piper TTS, inbound voice-note transcription via whisper.cpp. /voice on enables voice replies; /voice transcribe on enables voice-in.",
+      "tarball": "https://github.com/LukeJamesCode/modulus-registry/releases/download/v1.0.0/modulus-voice-1.0.0.tgz",
+      "sha256": "339a3f087af3fd23328074bde12905ecd27ebaf2d058f7a69629915ea05b8df5",
+      "permissions": {
+        "network": [
+          "github.com",
+          "huggingface.co"
+        ]
+      }
+    },
+    {
+      "name": "modulus-websearch",
+      "version": "1.0.0",
+      "description": "Web search as a safe, read-only LLM tool (DuckDuckGo or a self-hosted SearXNG). Results are SSRF-guarded, stripped to plain text, and framed as untrusted reference data.",
+      "tarball": "https://github.com/LukeJamesCode/modulus-registry/releases/download/v1.0.0/modulus-websearch-1.0.0.tgz",
+      "sha256": "f3de57f76b78ca9ef04dda4fc91ad640a57e84db581abfcbb69af76295e3210e",
+      "permissions": {
+        "network": [
+          "html.duckduckgo.com"
+        ]
+      }
+    }
+  ]
+}
