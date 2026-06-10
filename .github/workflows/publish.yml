@@ -1,0 +1,75 @@
+name: publish
+
+# Publish the curated Modulus module registry. Push a version tag (e.g. v1.0.0)
+# and this packs every folder under modules/ into a strict-ustar .tgz, computes
+# its sha256, attaches the tarballs to the release for that tag, regenerates
+# index.json (the file Modulus reads), and commits it back to main.
+#
+# The tarball layout MUST satisfy src/core/installer.ts's strict extractor:
+# plain ustar, paths <= 100 bytes, a single ./<name>/ prefix, no symlinks /
+# absolute paths / .. traversal. `tar --format=ustar -C modules <name>` does
+# exactly that; npm pack does NOT (it emits pax headers + a package/ prefix).
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out main (not the detached tag) so we can commit index.json back.
+      # The modules packed are main's; the release is still named by the tag.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Pack each module and build index.json
+        env:
+          TAG: ${{ github.ref_name }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          : > entries.ndjson
+          for dir in modules/*/; do
+            [ -f "$dir/manifest.json" ] || continue
+            name=$(jq -r '.name' "$dir/manifest.json")
+            version=$(jq -r '.version' "$dir/manifest.json")
+            tgz="dist/${name}-${version}.tgz"
+            # Defensive excludes (the registry vendors source only, no tests/deps).
+            tar --format=ustar \
+              --exclude='*.test.ts' --exclude='node_modules' --exclude='tsconfig.json' \
+              -czf "$tgz" -C modules "$name"
+            sha=$(sha256sum "$tgz" | cut -d' ' -f1)
+            url="https://github.com/${REPO}/releases/download/${TAG}/${name}-${version}.tgz"
+            jq -n \
+              --arg n "$name" --arg v "$version" --arg t "$url" --arg s "$sha" \
+              --arg d "$(jq -r '.description // ""' "$dir/manifest.json")" \
+              --argjson p "$(jq '.permissions // {}' "$dir/manifest.json")" \
+              '{name:$n, version:$v, description:$d, tarball:$t, sha256:$s, permissions:$p}' \
+              >> entries.ndjson
+            echo "packed ${name}-${version} ($sha)"
+          done
+          jq -s '{modules: (. | sort_by(.name))}' entries.ndjson > index.json
+          rm -f entries.ndjson
+          echo "--- index.json ---"
+          cat index.json
+
+      - name: Attach tarballs to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: dist/*.tgz
+          fail_on_unmatched_files: true
+
+      - name: Commit index.json back to main
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: main
+          file_pattern: index.json
+          commit_message: 'Publish registry index for ${{ github.ref_name }}'
